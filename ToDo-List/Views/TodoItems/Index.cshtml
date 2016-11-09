@@ -1,0 +1,117 @@
+﻿@model IEnumerable<ToDo_List.Models.TodoItem>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+       <th>
+           @*//There will be something here in the table*@
+       </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItenName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemNote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Priority)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DueDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateCreate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateCompleted)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+
+    string extraStuff = "";
+    if (item.DateCompleted != null)
+    {
+        extraStuff = "class=stricken";
+    }
+   
+    <tr @extraStuff>
+        <td>
+           
+            @if(item.DateCompleted == null)
+            {
+                @* Item hasn't been completed!!!! *@
+
+                @*//the order has to be in the format action name, controller name, and FormMethod name in the using HTML line below. this
+                    should redirect the push of the button to the controller code *@
+
+            using (Html.BeginForm("Finish", "TodoItems", FormMethod.Post))
+            {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("id", item.TodoItemID)
+
+                <button>
+                    <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span>
+                </button>
+                }
+            }
+
+            else
+            {
+                using (Html.BeginForm("Unfinish", "TodoItems", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("id", item.TodoItemID)
+
+               <button>
+            <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+               </button>
+                }
+            }
+
+
+        </td>
+        <td>
+            @if (item.DateCompleted != null)
+            {
+                @* its dont! strike it out!*@
+
+           <strike>@Html.DisplayFor(modelItem => item.ItenName)</strike>
+            }
+            else
+            {
+                @Html.DisplayFor(modelItem => item.ItenName)
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ItemNote)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Priority)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DueDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCreate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCompleted)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.TodoItemID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.TodoItemID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.TodoItemID })
+        </td>
+    </tr>
+}
+
+</table>
